@@ -5,90 +5,139 @@ body {
     height: 100vh;
     background: linear-gradient(135deg, #87ceeb, #6a5acd);
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     text-align: center;
-    max-width: 400px;
+    max-width: 450px;
+    position: relative;
+    transition: opacity 0.3s ease;
 }
 
-/* Стили главной страницы */
-.home .profile {
-    margin-bottom: 20px;
-}
-
-.home .cases {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.home .case {
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.home .case:nth-child(1) { border: 2px solid #32cd32; } /* Обычный */
-.home .case:nth-child(2) { border: 2px solid #1e90ff; } /* Редкий */
-.home .case:nth-child(3) { border: 2px solid #da70d6; } /* Эпический */
-.home .case:nth-child(4) { border: 2px solid #ffd700; } /* Легендарный */
-
-.home button {
-    padding: 10px;
-    font-size: 16px;
-    background-color: #ff4500;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.home button:hover {
-    background-color: #cc3700;
-}
-
-/* Стили страницы кейса */
-.case .profile {
+.home .profile, .case .profile {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
 }
 
-.case .profile button {
-    padding: 5px 10px;
-    font-size: 14px;
+.profile h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
 }
 
-.case .roulette {
+.profile p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.home h1 {
+    font-size: 28px;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.cases-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 10px;
+}
+
+.case {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.case:hover {
+    transform: scale(1.05);
+}
+
+.case:nth-child(1) { border: 3px solid #32cd32; } /* Обычный */
+.case:nth-child(2) { border: 3px solid #1e90ff; } /* Редкий */
+.case:nth-child(3) { border: 3px solid #da70d6; } /* Эпический */
+.case:nth-child(4) { border: 3px solid #ffd700; } /* Легендарный */
+
+.case h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 0 0 10px;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.home button {
+    background-color: #ff4500;
+    color: white;
+}
+
+.home button:hover {
+    background-color: #cc3700;
+    transform: translateY(-2px);
+}
+
+.case button {
+    background-color: #ff4500;
+    color: white;
+    margin: 5px;
+}
+
+.case button:hover {
+    background-color: #cc3700;
+    transform: translateY(-2px);
+}
+
+.case button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.roulette {
     margin: 20px 0;
+    position: relative;
 }
 
-.case .wheel-container {
+.wheel-container {
     position: relative;
-    width: 250px;
-    height: 250px;
+    width: 300px;
+    height: 300px;
     margin: 0 auto;
 }
 
-.case .arrow {
+.arrow {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -120%);
-    font-size: 40px;
+    transform: translate(-50%, -130%);
+    font-size: 50px;
     color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
     z-index: 10;
 }
 
-.case .wheel {
+.wheel {
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -96,9 +145,10 @@ body {
     overflow: hidden;
     transform-origin: center;
     transition: transform 6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    border: 5px solid #fff;
 }
 
-.case .sector {
+.sector {
     position: absolute;
     width: 50%;
     height: 50%;
@@ -109,34 +159,40 @@ body {
     justify-content: center;
     color: white;
     font-weight: bold;
+    font-size: 16px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     background-color: var(--color);
     transform: rotate(calc(60deg * var(--i)));
 }
 
-#spin-btn {
-    padding: 12px 25px;
+#result {
     font-size: 18px;
-    background-color: #ff4500;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
+    color: #333;
     margin-top: 10px;
+    font-weight: bold;
 }
 
-#spin-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.history {
+    margin-top: 20px;
+}
+
+.history h3 {
+    font-size: 20px;
+    color: #333;
 }
 
 .history ul {
     list-style: none;
     padding: 0;
-    max-height: 100px;
+    max-height: 120px;
     overflow-y: auto;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .history li {
     margin: 5px 0;
     font-size: 14px;
+    color: #555;
 }
