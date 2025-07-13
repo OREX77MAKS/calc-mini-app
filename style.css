@@ -14,37 +14,63 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     text-align: center;
-}
-
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
+    max-width: 400px;
 }
 
 .profile {
     margin-bottom: 20px;
 }
 
-#click-btn, #upgrade-btn {
+.roulette {
+    margin-bottom: 20px;
+}
+
+.wheel {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    transition: transform 3s ease-out;
+}
+
+.sector {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transform-origin: 100% 100%;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    background-color: var(--color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transform: rotate(calc(60deg * var(--i)));
+}
+
+#spin-btn {
     padding: 10px 20px;
     font-size: 18px;
-    margin: 10px;
+    background-color: #0088cc;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
-#click-btn {
-    background-color: #0088cc;
-    color: white;
-}
-
-#upgrade-btn {
-    background-color: #28a745;
-    color: white;
-}
-
-#upgrade-btn:disabled {
+#spin-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+.history ul {
+    list-style: none;
+    padding: 0;
+}
+
+.history li {
+    margin: 5px 0;
 }
