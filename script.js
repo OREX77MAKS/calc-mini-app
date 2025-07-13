@@ -21,12 +21,12 @@ let lastSpin = localStorage.getItem('lastSpin') ? new Date(localStorage.getItem(
 let history = localStorage.getItem('history') ? JSON.parse(localStorage.getItem('history')) : [];
 
 const prizes = [
-    { name: '100 очков', value: 100, chance: 30, img: 'https://img.icons8.com/color/48/000000/coin.png' },
-    { name: 'Скин', value: 0, chance: 20, img: 'https://img.icons8.com/color/48/000000/knife.png' },
-    { name: 'Бонус', value: 50, chance: 15, img: 'https://img.icons8.com/color/48/000000/star.png' },
-    { name: '500 очков', value: 500, chance: 10, img: 'https://img.icons8.com/color/48/000000/money-bag.png' },
-    { name: 'Пусто', value: 0, chance: 15, img: 'https://img.icons8.com/color/48/000000/empty-box.png' },
-    { name: '200 очков', value: 200, chance: 10, img: 'https://img.icons8.com/color/48/000000/silver-coin.png' }
+    { name: '100 очков', value: 100, chance: 30, img: 'https://img.icons8.com/color/96/000000/coin.png' },
+    { name: 'Скин', value: 0, chance: 20, img: 'https://img.icons8.com/color/96/000000/knife.png' },
+    { name: 'Бонус', value: 50, chance: 15, img: 'https://img.icons8.com/color/96/000000/star.png' },
+    { name: '500 очков', value: 500, chance: 10, img: 'https://img.icons8.com/color/96/000000/money-bag.png' },
+    { name: 'Пусто', value: 0, chance: 15, img: 'https://img.icons8.com/color/96/000000/empty-box.png' },
+    { name: '200 очков', value: 200, chance: 10, img: 'https://img.icons8.com/color/96/000000/silver-coin.png' }
 ];
 
 usernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
@@ -74,7 +74,7 @@ cases.forEach(caseEl => {
 
         // Заполняем рулетку изображениями
         caseRoulette.innerHTML = '';
-        const items = [...prizes, ...prizes, ...prizes, ...prizes, ...prizes]; // Больше повторов
+        const items = [...prizes, ...prizes, ...prizes, ...prizes, ...prizes];
         items.forEach(prize => {
             const item = document.createElement('div');
             item.className = 'roulette-item';
@@ -106,7 +106,7 @@ cases.forEach(caseEl => {
                 speed = Math.max(1, speed - 0.2); // Замедление
             }
 
-            caseRoulette.scrollLeft = scrollPos % totalWidth; // Горизонтальная прокрутка
+            caseRoulette.scrollLeft = scrollPos % totalWidth;
 
             if (scrollPos < targetScroll) {
                 requestAnimationFrame(animateScroll);
