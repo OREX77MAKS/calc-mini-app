@@ -60,7 +60,9 @@ body {
     border-radius: 10px;
     text-align: center;
     width: 90%;
-    max-width: 500px;
+    max-width: 600px; /* Увеличим ширину */
+    max-height: 80vh; /* Ограничим высоту */
+    overflow-y: auto; /* Скролл, если нужно */
     color: #fff;
 }
 
@@ -68,39 +70,39 @@ body {
     position: relative;
     height: 150px;
     margin: 10px 0;
-    overflow: hidden; /* Скрываем лишнее */
+    overflow: hidden;
 }
 
 .case-roulette {
     height: 100px;
-    width: 500px; /* Увеличим ширину для горизонтали */
+    width: 500px;
     background-color: #3a3a50;
-    overflow-x: hidden; /* Только горизонтальная прокрутка */
+    overflow-x: hidden;
     position: relative;
     display: flex;
-    flex-direction: row; /* Горизонтальная ориентация */
+    flex-direction: row;
     align-items: center;
-    white-space: nowrap; /* Предотвращаем перенос строк */
+    white-space: nowrap;
 }
 
 .roulette-item {
     height: 100px;
     width: 100px;
-    display: inline-flex; /* Горизонтальный ряд */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     margin: 0 5px;
 }
 
 .roulette-item img {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 90%; /* Уменьшим для адаптации */
+    max-height: 90%;
     object-fit: contain;
 }
 
 .final-prize {
-    height: 100px;
-    width: 100px;
+    height: 120px; /* Увеличим для лучшей видимости */
+    width: 120px;
     margin: 10px auto;
     display: none;
     align-items: center;
@@ -115,7 +117,7 @@ body {
 }
 
 .case-roulette.animate {
-    transition: transform 4s ease-out; /* 4 секунды анимации */
+    transition: transform 4s ease-out;
 }
 
 #close-modal {

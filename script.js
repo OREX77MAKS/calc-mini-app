@@ -29,6 +29,12 @@ const prizes = [
     { name: '200 очков', value: 200, chance: 10, img: 'https://img.icons8.com/color/96/000000/silver-coin.png' }
 ];
 
+// Предзагрузка изображений
+prizes.forEach(prize => {
+    const img = new Image();
+    img.src = prize.img;
+});
+
 usernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
 
 function getRandomPrize() {
@@ -81,6 +87,7 @@ cases.forEach(caseEl => {
             const img = document.createElement('img');
             img.src = prize.img;
             img.alt = prize.name;
+            img.onload = () => console.log('Preloaded:', prize.img); // Отладка
             item.appendChild(img);
             caseRoulette.appendChild(item);
         });
@@ -114,13 +121,12 @@ cases.forEach(caseEl => {
                 caseRoulette.scrollTo({ left: targetScroll, behavior: 'smooth' });
                 setTimeout(() => {
                     const prize = prizes[targetPrizeIndex];
-                    // Исправляем вставку изображения
                     finalPrize.innerHTML = ''; // Очищаем
                     const imgElement = document.createElement('img');
                     imgElement.src = prize.img;
                     imgElement.alt = prize.name;
                     imgElement.onload = () => {
-                        console.log('Image loaded:', prize.img); // Отладка
+                        console.log('Final prize loaded:', prize.img);
                         finalPrize.appendChild(imgElement);
                         finalPrize.style.display = 'flex';
                         modalResult.textContent = `Вы выиграл: ${prize.name}`;
@@ -134,9 +140,9 @@ cases.forEach(caseEl => {
                         updateUI();
                     };
                     imgElement.onerror = () => {
-                        console.error('Image failed to load:', prize.img); // Отладка ошибки
-                        finalPrize.innerHTML = '<p>Ошибка загрузки приза</p>';
-                        modalResult.textContent = `Ошибка: ${prize.name} не загружен`;
+                        console.error('Final prize failed to load:', prize.img);
+                        finalPrize.innerHTML = '<p>Ошибка загрузки</p>';
+                        modalResult.textContent = `Ошибка: ${prize.name}`;
                     };
                     if (!imgElement.complete) {
                         finalPrize.style.display = 'none'; // Скрываем до загрузки
