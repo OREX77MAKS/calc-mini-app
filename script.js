@@ -20,12 +20,12 @@ let lastSpin = localStorage.getItem('lastSpin') ? new Date(localStorage.getItem(
 let history = localStorage.getItem('history') ? JSON.parse(localStorage.getItem('history')) : [];
 
 const prizes = [
-    { name: '100 очков', value: 100, chance: 30, img: 'https://imgur.com/8f5MtZ4' },
-    { name: 'Скин', value: 0, chance: 20, img: 'https://imgur.com/8f5MtZ4' },
-    { name: 'Бонус', value: 50, chance: 15, img: 'https://imgur.com/8f5MtZ4' },
-    { name: '500 очков', value: 500, chance: 10, img: 'https://imgur.com/8f5MtZ4' },
-    { name: 'Пусто', value: 0, chance: 15, img: 'https://imgur.com/8f5MtZ4' },
-    { name: '200 очков', value: 200, chance: 10, img: 'https://imgur.com/8f5MtZ4' }
+    { name: '100 очков', value: 100, chance: 30, img: 'https://imgur.com/8f5MtZ4.jpg' },
+    { name: 'Скин', value: 0, chance: 20, img: 'https://imgur.com/8f5MtZ4.jpg' },
+    { name: 'Бонус', value: 50, chance: 15, img: 'https://imgur.com/8f5MtZ4.jpg' },
+    { name: '500 очков', value: 500, chance: 10, img: 'https://imgur.com/8f5MtZ4.jpg' },
+    { name: 'Пусто', value: 0, chance: 15, img: 'https://imgur.com/8f5MtZ4.jpg' },
+    { name: '200 очков', value: 200, chance: 10, img: 'https://imgur.com/8f5MtZ4.jpg' }
 ];
 
 usernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
