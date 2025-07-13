@@ -6,12 +6,13 @@ const usernameEl = document.getElementById('username');
 const balanceEl = document.getElementById('balance');
 const spinsEl = document.getElementById('spins');
 const timerEl = document.getElementById('timer');
-const wheel = document.getElementById('wheel');
-const spinBtn = document.getElementById('spin-btn');
-const buySpinBtn = document.getElementById('buy-spin-btn');
-const resultEl = document.getElementById('result');
+const cases = document.querySelectorAll('.case');
+const modal = document.getElementById('modal');
+const slotMachine = document.getElementById('slot-machine');
+const modalResult = document.getElementById('modal-result');
+const closeModalBtn = document.getElementById('close-modal');
 const historyList = document.getElementById('history-list');
-const spinSound = document.getElementById('spin-sound');
+const openSound = document.getElementById('open-sound');
 
 let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 0;
 let spins = localStorage.getItem('spins') ? parseInt(localStorage.getItem('spins')) : 1;
@@ -42,8 +43,7 @@ function getRandomPrize() {
 function updateUI() {
     balanceEl.textContent = balance;
     spinsEl.textContent = spins;
-    spinBtn.disabled = spins <= 0;
-    buySpinBtn.disabled = balance < 50;
+    cases.forEach(c => c.style.opacity = spins > 0 ? '1' : '0.5');
 
     if (!lastSpin || Date.now() - lastSpin > 24 * 60 * 60 * 1000) {
         spins = 1;
@@ -64,30 +64,45 @@ function updateUI() {
     });
 }
 
-spinBtn.addEventListener('click', () => {
-    if (spins <= 0) return;
-    spins--;
-    spinSound.play();
-    const randomRotation = Math.floor(Math.random() * 360) + 360 * 6;
-    wheel.style.transition = 'transform 6s cubic-bezier(0.25, 0.1, 0.25, 1)';
-    wheel.style.transform = `rotate(${randomRotation}deg)`;
+cases.forEach(caseEl => {
+    caseEl.addEventListener('click', () => {
+        if (spins <= 0) return;
+        spins--;
+        openSound.play();
+        modal.style.display = 'flex';
 
-    setTimeout(() => {
-        const prize = getRandomPrize();
-        resultEl.textContent = `Выиграл: ${prize.name}`;
-        if (prize.value > 0) {
-            balance += prize.value;
-            localStorage.setItem('balance', balance);
-        }
-        history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
-        localStorage.setItem('history', JSON.stringify(history));
-        localStorage.setItem('spins', spins);
-        updateUI();
-        wheel.style.transition = 'none';
-    }, 6000);
+        const slotItems = prizes.map(p => `<div class="slot-item">${p.name}</div>`).join('');
+        slotMachine.innerHTML = slotItems;
+        const slotHeight = slotMachine.scrollHeight / prizes.length;
+        let scrollPos = 0;
+
+        const interval = setInterval(() => {
+            scrollPos += 10;
+            slotMachine.scrollTop = scrollPos;
+            if (scrollPos >= slotMachine.scrollHeight) scrollPos = 0;
+        }, 50);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            const prize = getRandomPrize();
+            modalResult.textContent = `Вы выиграл: ${prize.name}`;
+            if (prize.value > 0) {
+                balance += prize.value;
+                localStorage.setItem('balance', balance);
+            }
+            history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
+            localStorage.setItem('history', JSON.stringify(history));
+            localStorage.setItem('spins', spins);
+            updateUI();
+        }, 2000);
+    });
 });
 
-buySpinBtn.addEventListener('click', () => {
+closeModalBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+function buySpin() {
     if (balance >= 50) {
         balance -= 50;
         spins++;
@@ -95,7 +110,14 @@ buySpinBtn.addEventListener('click', () => {
         localStorage.setItem('spins', spins);
         updateUI();
     }
-});
+}
+
+// Добавим кнопку покупки спина
+const buySpinBtn = document.createElement('button');
+buySpinBtn.textContent = 'Купить спин (50 очков)';
+buySpinBtn.id = 'buy-spin-btn';
+buySpinBtn.addEventListener('click', buySpin);
+document.querySelector('.profile').appendChild(buySpinBtn);
 
 setInterval(updateUI, 1000);
 updateUI();

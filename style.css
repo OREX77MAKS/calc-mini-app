@@ -17,59 +17,67 @@ body {
     max-width: 400px;
 }
 
-h1 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 15px;
-}
-
-.profile, .roulette, .history {
+.profile, .cases, .history {
     margin: 15px 0;
 }
 
-.wheel-container {
-    position: relative;
-    width: 250px;
-    height: 250px;
-    margin: 0 auto;
+.cases {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
-.arrow {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 40px;
-    color: #ffd700;
-    z-index: 10;
-    text-shadow: 0 0 5px #000;
+.case {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: transform 0.2s;
 }
 
-.wheel {
+.case:hover {
+    transform: scale(1.05);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-    position: relative;
-    overflow: hidden;
-    transform-origin: center;
-    transition: transform 6s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.sector {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    transform-origin: 100% 100%;
-    clip-path: polygon(0 0, 100% 0, 0 100%);
-    display: flex;
+    background-color: rgba(0, 0, 0, 0.5);
     align-items: center;
     justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 80%;
+    max-width: 300px;
+}
+
+.slot-machine {
+    height: 200px;
+    background-color: #f0f0f0;
+    margin: 10px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+#close-modal {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff4500;
     color: white;
-    font-weight: bold;
-    font-size: 14px;
-    background-color: var(--color);
-    transform: rotate(calc(60deg * var(--i)));
-    text-shadow: 0 0 2px #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 #spin-btn, #buy-spin-btn {
@@ -106,5 +114,4 @@ h1 {
 .history li {
     margin: 5px 0;
     font-size: 14px;
-    color: #444;
 }
