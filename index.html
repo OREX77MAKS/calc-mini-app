@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кейсы</title>
+    <title>Кейсы и Рулетка</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -48,14 +48,7 @@
         <div class="roulette">
             <div class="wheel-container">
                 <div class="arrow"></div>
-                <div class="wheel" id="wheel">
-                    <div class="sector" style="--i: 0; --color: #ff4500;">100</div>
-                    <div class="sector" style="--i: 1; --color: #32cd32;">Скин</div>
-                    <div class="sector" style="--i: 2; --color: #1e90ff;">Бонус</div>
-                    <div class="sector" style="--i: 3; --color: #ffd700;">500</div>
-                    <div class="sector" style="--i: 4; --color: #da70d6;">Пусто</div>
-                    <div class="sector" style="--i: 5; --color: #20b2aa;">200</div>
-                </div>
+                <div class="wheel" id="wheel"></div>
             </div>
             <button id="spin-btn">Крутить!</button>
             <button id="buy-spin-btn">Купить спин (50)</button>
@@ -64,6 +57,13 @@
         <div class="history">
             <h3>История</h3>
             <ul id="history-list"></ul>
+        </div>
+        <div id="prize-popup" class="popup" style="display: none;">
+            <div class="popup-content">
+                <h3>Вы выиграли!</h3>
+                <p id="prize-text"></p>
+                <button onclick="closePopup()">OK</button>
+            </div>
         </div>
     </div>
 </body>

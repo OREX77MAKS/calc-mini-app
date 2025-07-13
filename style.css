@@ -28,12 +28,14 @@ body {
     padding: 10px;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
 .profile h2 {
     margin: 0;
     font-size: 20px;
     color: #333;
+    text-transform: uppercase;
 }
 
 .profile p {
@@ -47,6 +49,7 @@ body {
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
+    animation: fadeIn 1s ease;
 }
 
 .cases-grid {
@@ -61,11 +64,12 @@ body {
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .case:hover {
     transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .case:nth-child(1) { border: 3px solid #32cd32; } /* Обычный */
@@ -77,6 +81,7 @@ body {
     font-size: 18px;
     color: #333;
     margin: 0 0 10px;
+    text-transform: uppercase;
 }
 
 button {
@@ -86,6 +91,7 @@ button {
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .home button {
@@ -96,6 +102,7 @@ button {
 .home button:hover {
     background-color: #cc3700;
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .case button {
@@ -107,6 +114,7 @@ button {
 .case button:hover {
     background-color: #cc3700;
     transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .case button:disabled {
@@ -117,6 +125,7 @@ button {
 .roulette {
     margin: 20px 0;
     position: relative;
+    animation: fadeInUp 0.5s ease;
 }
 
 .wheel-container {
@@ -124,6 +133,9 @@ button {
     width: 300px;
     height: 300px;
     margin: 0 auto;
+    background: radial-gradient(circle, #fff 0%, #f0f0f0 70%);
+    border-radius: 50%;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .arrow {
@@ -141,7 +153,9 @@ button {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     overflow: hidden;
     transform-origin: center;
     transition: transform 6s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -170,10 +184,12 @@ button {
     color: #333;
     margin-top: 10px;
     font-weight: bold;
+    animation: fadeIn 0.5s ease;
 }
 
 .history {
     margin-top: 20px;
+    animation: fadeInUp 0.7s ease;
 }
 
 .history h3 {
@@ -189,10 +205,71 @@ button {
     background: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .history li {
     margin: 5px 0;
     font-size: 14px;
     color: #555;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 300px;
+}
+
+.popup-content h3 {
+    font-size: 24px;
+    color: #ff4500;
+    margin: 0 0 10px;
+}
+
+.popup-content p {
+    font-size: 18px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.popup-content button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #32cd32;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.popup-content button:hover {
+    background-color: #28a745;
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
