@@ -3,72 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кейсы и Рулетка</title>
+    <title>Новая Рулетка</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script> <!-- Проверка пути -->
+    <script src="script.js" defer></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <audio id="spin-sound" src="https://www.soundjay.com/buttons/beep-01a.mp3" preload="auto"></audio>
 </head>
 <body>
-    <div class="container home">
+    <div class="container">
+        <h1>Новая Рулетка Подарков</h1>
         <div class="profile">
             <h2 id="username">Профиль</h2>
             <p>Баланс: <span id="balance">0</span> очков</p>
             <p>Спины: <span id="spins">1</span> (1/день)</p>
-            <p id="timer">След. спин: --:--</p>
+            <p id="timer">Следующий спин: --:--</p>
         </div>
-        <h1>Выбери кейс</h1>
-        <div class="cases-grid">
-            <div class="case" data-case="common">
-                <h3>Обычный кейс</h3>
-                <button onclick="spinCase('common')">Крутить!</button>
-            </div>
-            <div class="case" data-case="rare">
-                <h3>Редкий кейс</h3>
-                <button onclick="spinCase('rare')">Крутить!</button>
-            </div>
-            <div class="case" data-case="epic">
-                <h3>Эпический кейс</h3>
-                <button onclick="spinCase('epic')">Крутить!</button>
-            </div>
-            <div class="case" data-case="legendary">
-                <h3>Легендарный кейс</h3>
-                <button onclick="spinCase('legendary')">Крутить!</button>
-            </div>
-        </div>
-    </div>
-    <div class="container case" style="display: none;">
-        <div class="profile">
-            <h2 id="case-username">Профиль</h2>
-            <p>Баланс: <span id="case-balance">0</span> очков</p>
-            <p>Спины: <span id="case-spins">1</span></p>
-            <button onclick="goBack()">Назад</button>
-        </div>
-        <h1 id="case-title">Кейс</h1>
         <div class="roulette">
             <div class="wheel-container">
-                <div class="arrow"></div>
-                <div class="wheel" id="wheel"></div>
+                <div class="arrow">▲</div>
+                <div class="wheel" id="wheel">
+                    <div class="sector" style="--i: 0; --color: #ff4500;">100 очков</div>
+                    <div class="sector" style="--i: 1; --color: #32cd32;">Скин</div>
+                    <div class="sector" style="--i: 2; --color: #1e90ff;">Бонус</div>
+                    <div class="sector" style="--i: 3; --color: #ffd700;">500 очков</div>
+                    <div class="sector" style="--i: 4; --color: #da70d6;">Пусто</div>
+                    <div class="sector" style="--i: 5; --color: #20b2aa;">200 очков</div>
+                </div>
             </div>
             <button id="spin-btn">Крутить!</button>
-            <button id="buy-spin-btn">Купить спин (50)</button>
-            <p id="result">Выиграй приз!</p>
+            <button id="buy-spin-btn">Купить спин (50 очков)</button>
+            <p id="result">Крути и выигрывай!</p>
         </div>
         <div class="history">
-            <h3>История</h3>
+            <h3>История выигрышей</h3>
             <ul id="history-list"></ul>
         </div>
-        <div id="prize-popup" class="popup" style="display: none;">
-            <div class="popup-content">
-                <h3>Вы выиграли!</h3>
-                <p id="prize-text"></p>
-                <button onclick="closePopup()">OK</button>
-            </div>
-        </div>
     </div>
-    <script>
-        // Тестовая проверка загрузки
-        console.log("Скрипт загружен");
-    </script>
 </body>
 </html>

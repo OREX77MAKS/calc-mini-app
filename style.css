@@ -3,163 +3,56 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #87ceeb, #6a5acd);
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
     margin: 0;
     font-family: 'Arial', sans-serif;
-    overflow: hidden;
 }
 
 .container {
     background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    max-width: 450px;
-    position: relative;
-    transition: opacity 0.3s ease;
-}
-
-.home .profile, .case .profile {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-}
-
-.profile h2 {
-    margin: 0;
-    font-size: 20px;
-    color: #333;
-    text-transform: uppercase;
-}
-
-.profile p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #555;
-}
-
-.home h1 {
-    font-size: 28px;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
-    animation: fadeIn 1s ease;
-}
-
-.cases-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    padding: 10px;
-}
-
-.case {
-    background: #fff;
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
 }
 
-.case:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.case:nth-child(1) { border: 3px solid #32cd32; } /* Обычный */
-.case:nth-child(2) { border: 3px solid #1e90ff; } /* Редкий */
-.case:nth-child(3) { border: 3px solid #da70d6; } /* Эпический */
-.case:nth-child(4) { border: 3px solid #ffd700; } /* Легендарный */
-
-.case h3 {
-    font-size: 18px;
+h1 {
+    font-size: 24px;
     color: #333;
-    margin: 0 0 10px;
-    text-transform: uppercase;
+    margin-bottom: 15px;
 }
 
-button {
-    padding: 12px 25px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.home button {
-    background-color: #ff4500;
-    color: white;
-}
-
-.home button:hover {
-    background-color: #cc3700;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.case button {
-    background-color: #ff4500;
-    color: white;
-    margin: 5px;
-}
-
-.case button:hover {
-    background-color: #cc3700;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.case button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.roulette {
-    margin: 20px 0;
-    position: relative;
-    animation: fadeInUp 0.5s ease;
+.profile, .roulette, .history {
+    margin: 15px 0;
 }
 
 .wheel-container {
     position: relative;
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
     margin: 0 auto;
-    background: radial-gradient(circle, #fff 0%, #f0f0f0 70%);
-    border-radius: 50%;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .arrow {
     position: absolute;
-    top: 50%;
+    top: -20px;
     left: 50%;
-    transform: translate(-50%, -130%);
-    font-size: 50px;
+    transform: translateX(-50%);
+    font-size: 40px;
     color: #ffd700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
     z-index: 10;
+    text-shadow: 0 0 5px #000;
 }
 
 .wheel {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     overflow: hidden;
     transform-origin: center;
     transition: transform 6s cubic-bezier(0.25, 0.1, 0.25, 1);
-    border: 5px solid #fff;
 }
 
 .sector {
@@ -173,103 +66,45 @@ button {
     justify-content: center;
     color: white;
     font-weight: bold;
-    font-size: 16px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    font-size: 14px;
     background-color: var(--color);
-    transform: rotate(calc(90deg * var(--i)));
+    transform: rotate(calc(60deg * var(--i)));
+    text-shadow: 0 0 2px #000;
 }
 
-#result {
+#spin-btn, #buy-spin-btn {
+    padding: 12px 25px;
     font-size: 18px;
-    color: #333;
-    margin-top: 10px;
-    font-weight: bold;
-    animation: fadeIn 0.5s ease;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 5px;
 }
 
-.history {
-    margin-top: 20px;
-    animation: fadeInUp 0.7s ease;
+#spin-btn {
+    background-color: #ff4500;
+    color: white;
 }
 
-.history h3 {
-    font-size: 20px;
-    color: #333;
+#buy-spin-btn {
+    background-color: #32cd32;
+    color: white;
+}
+
+#spin-btn:disabled, #buy-spin-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 .history ul {
     list-style: none;
     padding: 0;
-    max-height: 120px;
+    max-height: 100px;
     overflow-y: auto;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .history li {
     margin: 5px 0;
     font-size: 14px;
-    color: #555;
-}
-
-.popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
-}
-
-.popup-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 300px;
-}
-
-.popup-content h3 {
-    font-size: 24px;
-    color: #ff4500;
-    margin: 0 0 10px;
-}
-
-.popup-content p {
-    font-size: 18px;
-    color: #333;
-    margin: 10px 0;
-}
-
-.popup-content button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #32cd32;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.popup-content button:hover {
-    background-color: #28a745;
-    transform: translateY(-2px);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    color: #444;
 }

@@ -2,59 +2,34 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-const homeContainer = document.querySelector('.home');
-const caseContainer = document.querySelector('.case');
 const usernameEl = document.getElementById('username');
 const balanceEl = document.getElementById('balance');
-const caseUsernameEl = document.getElementById('case-username');
-const caseBalanceEl = document.getElementById('case-balance');
 const spinsEl = document.getElementById('spins');
-const caseSpinsEl = document.getElementById('case-spins');
 const timerEl = document.getElementById('timer');
 const wheel = document.getElementById('wheel');
 const spinBtn = document.getElementById('spin-btn');
 const buySpinBtn = document.getElementById('buy-spin-btn');
 const resultEl = document.getElementById('result');
 const historyList = document.getElementById('history-list');
-const prizePopup = document.getElementById('prize-popup');
-const prizeText = document.getElementById('prize-text');
 const spinSound = document.getElementById('spin-sound');
 
 let balance = localStorage.getItem('balance') ? parseInt(localStorage.getItem('balance')) : 0;
 let spins = localStorage.getItem('spins') ? parseInt(localStorage.getItem('spins')) : 1;
 let lastSpin = localStorage.getItem('lastSpin') ? new Date(localStorage.getItem('lastSpin')) : null;
 let history = localStorage.getItem('history') ? JSON.parse(localStorage.getItem('history')) : [];
-let currentCase = 'common';
 
-const casePrizes = {
-    common: [
-        { name: '50 очков', value: 50, chance: 40 },
-        { name: '100 очков', value: 100, chance: 30 },
-        { name: 'Скин', value: 0, chance: 20 },
-        { name: 'Пусто', value: 0, chance: 10 }
-    ],
-    rare: [
-        { name: '200 очков', value: 200, chance: 35 },
-        { name: 'Бонус', value: 50, chance: 25 },
-        { name: 'Редкий скин', value: 0, chance: 20 },
-        { name: 'Пусто', value: 0, chance: 20 }
-    ],
-    epic: [
-        { name: '500 очков', value: 500, chance: 25 },
-        { name: 'Эпический скин', value: 0, chance: 25 },
-        { name: 'Пусто', value: 0, chance: 30 },
-        { name: 'Бонус', value: 100, chance: 20 }
-    ],
-    legendary: [
-        { name: '1000 очков', value: 1000, chance: 20 },
-        { name: 'Легендарный скин', value: 0, chance: 20 },
-        { name: 'Джекпот', value: 2000, chance: 10 },
-        { name: 'Пусто', value: 0, chance: 50 }
-    ]
-};
+const prizes = [
+    { name: '100 очков', value: 100, chance: 30 },
+    { name: 'Скин', value: 0, chance: 20 },
+    { name: 'Бонус', value: 50, chance: 15 },
+    { name: '500 очков', value: 500, chance: 10 },
+    { name: 'Пусто', value: 0, chance: 15 },
+    { name: '200 очков', value: 200, chance: 10 }
+];
 
-function getRandomPrize(caseName) {
-    const prizes = casePrizes[caseName];
+usernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
+
+function getRandomPrize() {
     const totalChance = prizes.reduce((sum, p) => sum + p.chance, 0);
     let random = Math.random() * totalChance;
     for (let prize of prizes) {
@@ -65,9 +40,8 @@ function getRandomPrize(caseName) {
 }
 
 function updateUI() {
-    usernameEl.textContent = caseUsernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
-    balanceEl.textContent = caseBalanceEl.textContent = balance;
-    spinsEl.textContent = caseSpinsEl.textContent = spins;
+    balanceEl.textContent = balance;
+    spinsEl.textContent = spins;
     spinBtn.disabled = spins <= 0;
     buySpinBtn.disabled = balance < 50;
 
@@ -79,7 +53,7 @@ function updateUI() {
         const timeLeft = new Date(lastSpin.getTime() + 24 * 60 * 60 * 1000) - Date.now();
         const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
         const seconds = Math.floor((timeLeft / 1000) % 60);
-        timerEl.textContent = `След. спин: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        timerEl.textContent = `Следующий спин: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     }
 
     historyList.innerHTML = '';
@@ -88,65 +62,10 @@ function updateUI() {
         li.textContent = item;
         historyList.appendChild(li);
     });
-
-    if (caseContainer.style.display === 'block') {
-        wheel.innerHTML = '';
-        casePrizes[currentCase].forEach((prize, i) => {
-            const sector = document.createElement('div');
-            sector.className = 'sector';
-            sector.style.setProperty('--i', i);
-            sector.style.setProperty('--color', ['#ff4500', '#32cd32', '#1e90ff', '#ffd700', '#da70d6', '#20b2aa'][i % 6]);
-            sector.textContent = prize.name.split(' ')[0];
-            wheel.appendChild(sector);
-        });
-    } else {
-        console.log("Case container is not active");
-    }
 }
 
-function spinCase(caseName) {
-    currentCase = caseName;
-    if (caseContainer.style.display === 'none') {
-        openCase(caseName);
-    }
-    // Проверяем состояние после рендера
-    setTimeout(() => {
-        if (spins > 0) {
-            spinRoulette();
-        } else {
-            alert("Нет спинов! Купите спин за 50 очков.");
-        }
-    }, 200); // Увеличенная задержка для рендера
-}
-
-function openCase(caseName) {
-    currentCase = caseName;
-    document.getElementById('case-title').textContent = `${caseName.charAt(0).toUpperCase() + caseName.slice(1)} кейс`;
-    homeContainer.style.display = 'none';
-    caseContainer.style.display = 'block';
-    updateUI();
-    console.log(`Opened ${caseName} case, spins: ${spins}`); // Отладка
-}
-
-function goBack() {
-    caseContainer.style.display = 'none';
-    homeContainer.style.display = 'block';
-}
-
-function showPopup(message) {
-    prizeText.textContent = message;
-    prizePopup.style.display = 'flex';
-}
-
-function closePopup() {
-    prizePopup.style.display = 'none';
-}
-
-function spinRoulette() {
-    if (spins <= 0) {
-        alert("Нет спинов! Купите спин за 50 очков.");
-        return;
-    }
+spinBtn.addEventListener('click', () => {
+    if (spins <= 0) return;
     spins--;
     spinSound.play();
     const randomRotation = Math.floor(Math.random() * 360) + 360 * 6;
@@ -154,18 +73,19 @@ function spinRoulette() {
     wheel.style.transform = `rotate(${randomRotation}deg)`;
 
     setTimeout(() => {
-        const prize = getRandomPrize(currentCase);
-        resultEl.textContent = `Вы выиграли: ${prize.name}`;
-        if (prize.value > 0) balance += prize.value;
-        history.push(`${new Date().toLocaleTimeString()} - ${prize.name} (${document.getElementById('case-title').textContent})`);
-        localStorage.setItem('balance', balance);
-        localStorage.setItem('spins', spins);
+        const prize = getRandomPrize();
+        resultEl.textContent = `Выиграл: ${prize.name}`;
+        if (prize.value > 0) {
+            balance += prize.value;
+            localStorage.setItem('balance', balance);
+        }
+        history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
         localStorage.setItem('history', JSON.stringify(history));
-        showPopup(`Вы выиграли: ${prize.name}! +${prize.value > 0 ? prize.value : 0} очков`);
+        localStorage.setItem('spins', spins);
         updateUI();
         wheel.style.transition = 'none';
     }, 6000);
-}
+});
 
 buySpinBtn.addEventListener('click', () => {
     if (balance >= 50) {
