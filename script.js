@@ -20,12 +20,12 @@ let lastSpin = localStorage.getItem('lastSpin') ? new Date(localStorage.getItem(
 let history = localStorage.getItem('history') ? JSON.parse(localStorage.getItem('history')) : [];
 
 const prizes = [
-    { name: '100 очков', value: 100, chance: 30 },
-    { name: 'Скин', value: 0, chance: 20 },
-    { name: 'Бонус', value: 50, chance: 15 },
-    { name: '500 очков', value: 500, chance: 10 },
-    { name: 'Пусто', value: 0, chance: 15 },
-    { name: '200 очков', value: 200, chance: 10 }
+    { name: '100 очков', value: 100, chance: 30, img: 'https://imgur.com/a/91zWLlH' },
+    { name: 'Скин', value: 0, chance: 20, img: 'https://imgur.com/a/91zWLlH' },
+    { name: 'Бонус', value: 50, chance: 15, img: 'https://imgur.com/a/91zWLlH' },
+    { name: '500 очков', value: 500, chance: 10, img: 'https://imgur.com/a/7ECZEQP' },
+    { name: 'Пусто', value: 0, chance: 15, img: 'https://imgur.com/a/7ECZEQP' },
+    { name: '200 очков', value: 200, chance: 10, img: 'https://imgur.com/a/7ECZEQP' }
 ];
 
 usernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
@@ -71,23 +71,26 @@ cases.forEach(caseEl => {
         openSound.play();
         modal.style.display = 'flex';
 
-        // Создаём элементы для анимации
+        // Заполняем слот-машину изображениями
         slotMachine.innerHTML = '';
-        const items = [...prizes, ...prizes, ...prizes]; // Повторяем для эффекта
+        const items = [...prizes, ...prizes, ...prizes]; // Повторяем для анимации
         items.forEach(prize => {
             const item = document.createElement('div');
             item.className = 'slot-item';
-            item.textContent = prize.name;
+            const img = document.createElement('img');
+            img.src = prize.img; // Ссылка на изображение
+            img.alt = prize.name;
+            item.appendChild(img);
             slotMachine.appendChild(item);
         });
 
-        // Запускаем анимацию
+        // Анимация прокрутки
         slotMachine.classList.add('animate');
         const slotHeight = 40; // Высота каждого элемента
         const totalHeight = items.length * slotHeight;
         let scrollPos = 0;
 
-        const animationDuration = 2000; // 2 секунды анимации
+        const animationDuration = 2000; // 2 секунды
         const startTime = performance.now();
 
         function animate(time) {
@@ -97,9 +100,9 @@ cases.forEach(caseEl => {
                 slotMachine.scrollTop = scrollPos % totalHeight;
                 requestAnimationFrame(animate);
             } else {
-                // Останавливаем на случайном призе
+                // Останавливаемся на случайном призе
                 const prizeIndex = Math.floor(Math.random() * prizes.length);
-                const targetScroll = prizeIndex * slotHeight;
+                const targetScroll = prizeIndex * slotHeight + (totalHeight / prizes.length) * 2;
                 slotMachine.scrollTo({ top: targetScroll, behavior: 'smooth' });
                 slotMachine.classList.remove('animate');
 
