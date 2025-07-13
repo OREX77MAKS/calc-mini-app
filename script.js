@@ -26,7 +26,6 @@ let lastSpin = localStorage.getItem('lastSpin') ? new Date(localStorage.getItem(
 let history = localStorage.getItem('history') ? JSON.parse(localStorage.getItem('history')) : [];
 let currentCase = 'common';
 
-// Уникальные призы для каждого кейса
 const casePrizes = {
     common: [
         { name: '50 очков', value: 50, chance: 40 },
@@ -89,6 +88,27 @@ function updateUI() {
         li.textContent = item;
         historyList.appendChild(li);
     });
+
+    // Обновляем сектора для текущего кейса
+    if (caseContainer.style.display === 'block') {
+        wheel.innerHTML = '';
+        casePrizes[currentCase].forEach((_, i) => {
+            const sector = document.createElement('div');
+            sector.className = 'sector';
+            sector.style.setProperty('--i', i);
+            sector.style.setProperty('--color', ['#ff4500', '#32cd32', '#1e90ff', '#ffd700', '#da70d6', '#20b2aa'][i % 6]);
+            sector.textContent = casePrizes[currentCase][i].name.split(' ')[0];
+            wheel.appendChild(sector);
+        });
+    }
+}
+
+function spinCase(caseName) {
+    currentCase = caseName;
+    openCase(caseName);
+    if (spins > 0) {
+        spinRoulette();
+    }
 }
 
 function openCase(caseName) {
@@ -96,16 +116,6 @@ function openCase(caseName) {
     document.getElementById('case-title').textContent = `${caseName.charAt(0).toUpperCase() + caseName.slice(1)} кейс`;
     homeContainer.style.display = 'none';
     caseContainer.style.display = 'block';
-    // Обновляем сектора рулетки под текущий кейс
-    wheel.innerHTML = '';
-    casePrizes[caseName].forEach((_, i) => {
-        const sector = document.createElement('div');
-        sector.className = 'sector';
-        sector.style.setProperty('--i', i);
-        sector.style.setProperty('--color', ['#ff4500', '#32cd32', '#1e90ff', '#ffd700', '#da70d6', '#20b2aa'][i % 6]);
-        sector.textContent = casePrizes[caseName][i].name.split(' ')[0];
-        wheel.appendChild(sector);
-    });
     updateUI();
 }
 
@@ -123,7 +133,7 @@ function closePopup() {
     prizePopup.style.display = 'none';
 }
 
-spinBtn.addEventListener('click', () => {
+function spinRoulette() {
     if (spins <= 0) return;
     spins--;
     spinSound.play();
@@ -143,7 +153,7 @@ spinBtn.addEventListener('click', () => {
         updateUI();
         wheel.style.transition = 'none';
     }, 6000);
-});
+}
 
 buySpinBtn.addEventListener('click', () => {
     if (balance >= 50) {
