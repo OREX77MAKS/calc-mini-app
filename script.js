@@ -89,15 +89,14 @@ function updateUI() {
         historyList.appendChild(li);
     });
 
-    // Обновляем сектора для текущего кейса
     if (caseContainer.style.display === 'block') {
         wheel.innerHTML = '';
-        casePrizes[currentCase].forEach((_, i) => {
+        casePrizes[currentCase].forEach((prize, i) => {
             const sector = document.createElement('div');
             sector.className = 'sector';
             sector.style.setProperty('--i', i);
             sector.style.setProperty('--color', ['#ff4500', '#32cd32', '#1e90ff', '#ffd700', '#da70d6', '#20b2aa'][i % 6]);
-            sector.textContent = casePrizes[currentCase][i].name.split(' ')[0];
+            sector.textContent = prize.name.split(' ')[0]; // Только число или слово
             wheel.appendChild(sector);
         });
     }
@@ -105,7 +104,9 @@ function updateUI() {
 
 function spinCase(caseName) {
     currentCase = caseName;
-    openCase(caseName);
+    if (caseContainer.style.display === 'none') {
+        openCase(caseName);
+    }
     if (spins > 0) {
         spinRoulette();
     }

@@ -176,7 +176,7 @@ button {
     font-size: 16px;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     background-color: var(--color);
-    transform: rotate(calc(60deg * var(--i)));
+    transform: rotate(calc(90deg * var(--i)));
 }
 
 #result {
