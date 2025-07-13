@@ -21,32 +21,13 @@ let lastSpin = localStorage.getItem('lastSpin') ? new Date(localStorage.getItem(
 let history = localStorage.getItem('history') ? JSON.parse(localStorage.getItem('history')) : [];
 
 const prizes = [
-    { name: '100 очков', value: 100, chance: 30, img: 'https://img.icons8.com/color/96/000000/coin.png' },
-    { name: 'Скин', value: 0, chance: 20, img: 'https://img.icons8.com/color/96/000000/knife.png' },
-    { name: 'Бонус', value: 50, chance: 15, img: 'https://img.icons8.com/color/96/000000/star.png' },
-    { name: '500 очков', value: 500, chance: 10, img: 'https://img.icons8.com/color/96/000000/money-bag.png' },
-    { name: 'Пусто', value: 0, chance: 15, img: 'https://img.icons8.com/color/96/000000/empty-box.png' },
-    { name: '200 очков', value: 200, chance: 10, img: 'https://img.icons8.com/color/96/000000/silver-coin.png' }
+    { name: '100 очков', value: 100, chance: 30, color: '#ff4500' }, // Оранжевый
+    { name: 'Скин', value: 0, chance: 20, color: '#32cd32' }, // Зелёный
+    { name: 'Бонус', value: 50, chance: 15, color: '#ffd700' }, // Золотой
+    { name: '500 очков', value: 500, chance: 10, color: '#1e90ff' }, // Синий
+    { name: 'Пусто', value: 0, chance: 15, color: '#808080' }, // Серый
+    { name: '200 очков', value: 200, chance: 10, color: '#20b2aa' } // Бирюзовый
 ];
-
-// Предзагрузка изображений с проверкой
-prizes.forEach(prize => {
-    const img = new Image();
-    img.src = prize.img;
-    img.onload = () => console.log('Preloaded:', prize.img);
-    img.onerror = () => {
-        console.error('Failed to preload:', prize.img);
-        // Замена на запасной URL, если ошибка
-        switch (prize.name) {
-            case '100 очков': prize.img = 'https://img.icons8.com/color/48/000000/coin.png'; break;
-            case 'Скин': prize.img = 'https://img.icons8.com/color/48/000000/knife.png'; break;
-            case 'Бонус': prize.img = 'https://img.icons8.com/color/48/000000/star.png'; break;
-            case '500 очков': prize.img = 'https://img.icons8.com/color/48/000000/money-bag.png'; break;
-            case 'Пусто': prize.img = 'https://img.icons8.com/color/48/000000/empty-box.png'; break;
-            case '200 очков': prize.img = 'https://img.icons8.com/color/48/000000/silver-coin.png'; break;
-        }
-    };
-});
 
 usernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
 
@@ -91,31 +72,23 @@ cases.forEach(caseEl => {
         openSound.play();
         modal.style.display = 'flex';
 
-        // Предзагрузка и заполнение рулетки
+        // Заполняем рулетку цветными блоками
         caseRoulette.innerHTML = '';
         const items = [...prizes, ...prizes, ...prizes, ...prizes, ...prizes];
         items.forEach(prize => {
             const item = document.createElement('div');
             item.className = 'roulette-item';
-            const img = document.createElement('img');
-            img.src = prize.img;
-            img.alt = prize.name;
-            img.style.opacity = '0'; // Скрываем до загрузки
-            img.onload = () => {
-                img.style.opacity = '1'; // Показываем после загрузки
-                console.log('Item loaded in roulette:', prize.img);
-            };
-            img.onerror = () => console.error('Item failed to load in roulette:', prize.img);
-            item.appendChild(img);
+            item.style.backgroundColor = prize.color;
+            item.textContent = prize.name;
             caseRoulette.appendChild(item);
         });
 
         // Анимация слева направо
-        const totalWidth = items.length * 100;
+        const totalWidth = items.length * 150;
         let speed = 5;
         let scrollPos = 0;
         const targetPrizeIndex = Math.floor(Math.random() * prizes.length);
-        const targetScroll = targetPrizeIndex * 100 + (totalWidth / prizes.length) * 3;
+        const targetScroll = targetPrizeIndex * 150 + (totalWidth / prizes.length) * 3;
 
         function animateScroll(timestamp) {
             if (!start) start = timestamp;
@@ -140,38 +113,26 @@ cases.forEach(caseEl => {
                 setTimeout(() => {
                     const prize = prizes[targetPrizeIndex];
                     finalPrize.innerHTML = '';
-                    const imgElement = document.createElement('img');
-                    imgElement.src = prize.img;
-                    imgElement.alt = prize.name;
-                    imgElement.onload = () => {
-                        console.log('Final prize loaded:', prize.img);
-                        finalPrize.appendChild(imgElement);
-                        finalPrize.style.display = 'flex';
-                        modalResult.textContent = `Вы выиграл: ${prize.name}`;
-                        if (prize.value > 0) {
-                            balance += prize.value;
-                            localStorage.setItem('balance', balance);
-                        }
-                        history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
-                        localStorage.setItem('history', JSON.stringify(history));
-                        localStorage.setItem('spins', spins);
-                        updateUI();
-                    };
-                    imgElement.onerror = () => {
-                        console.error('Final prize failed to load:', prize.img);
-                        finalPrize.innerHTML = '<p>Ошибка загрузки</p>';
-                        modalResult.textContent = `Ошибка: ${prize.name}`;
-                    };
-                    if (!imgElement.complete) {
-                        finalPrize.style.display = 'none';
+                    const prizeDiv = document.createElement('div');
+                    prizeDiv.style.backgroundColor = prize.color;
+                    prizeDiv.textContent = prize.name;
+                    finalPrize.appendChild(prizeDiv);
+                    finalPrize.style.display = 'flex';
+                    modalResult.textContent = `Вы выиграл: ${prize.name}`;
+                    if (prize.value > 0) {
+                        balance += prize.value;
+                        localStorage.setItem('balance', balance);
                     }
+                    history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
+                    localStorage.setItem('history', JSON.stringify(history));
+                    localStorage.setItem('spins', spins);
+                    updateUI();
                 }, 500);
             }
         }
 
         let start;
-        // Задержка перед стартом для предзагрузки
-        setTimeout(() => requestAnimationFrame(animateScroll), 500);
+        requestAnimationFrame(animateScroll);
     });
 });
 
