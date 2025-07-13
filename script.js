@@ -114,17 +114,33 @@ cases.forEach(caseEl => {
                 caseRoulette.scrollTo({ left: targetScroll, behavior: 'smooth' });
                 setTimeout(() => {
                     const prize = prizes[targetPrizeIndex];
-                    finalPrize.innerHTML = `<img src="${prize.img}" alt="${prize.name}">`;
-                    finalPrize.style.display = 'flex';
-                    modalResult.textContent = `Вы выиграл: ${prize.name}`;
-                    if (prize.value > 0) {
-                        balance += prize.value;
-                        localStorage.setItem('balance', balance);
+                    // Исправляем вставку изображения
+                    finalPrize.innerHTML = ''; // Очищаем
+                    const imgElement = document.createElement('img');
+                    imgElement.src = prize.img;
+                    imgElement.alt = prize.name;
+                    imgElement.onload = () => {
+                        console.log('Image loaded:', prize.img); // Отладка
+                        finalPrize.appendChild(imgElement);
+                        finalPrize.style.display = 'flex';
+                        modalResult.textContent = `Вы выиграл: ${prize.name}`;
+                        if (prize.value > 0) {
+                            balance += prize.value;
+                            localStorage.setItem('balance', balance);
+                        }
+                        history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
+                        localStorage.setItem('history', JSON.stringify(history));
+                        localStorage.setItem('spins', spins);
+                        updateUI();
+                    };
+                    imgElement.onerror = () => {
+                        console.error('Image failed to load:', prize.img); // Отладка ошибки
+                        finalPrize.innerHTML = '<p>Ошибка загрузки приза</p>';
+                        modalResult.textContent = `Ошибка: ${prize.name} не загружен`;
+                    };
+                    if (!imgElement.complete) {
+                        finalPrize.style.display = 'none'; // Скрываем до загрузки
                     }
-                    history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
-                    localStorage.setItem('history', JSON.stringify(history));
-                    localStorage.setItem('spins', spins);
-                    updateUI();
                 }, 500);
             }
         }
