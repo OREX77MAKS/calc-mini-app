@@ -29,10 +29,23 @@ const prizes = [
     { name: '200 очков', value: 200, chance: 10, img: 'https://img.icons8.com/color/96/000000/silver-coin.png' }
 ];
 
-// Предзагрузка изображений
+// Предзагрузка изображений с проверкой
 prizes.forEach(prize => {
     const img = new Image();
     img.src = prize.img;
+    img.onload = () => console.log('Preloaded:', prize.img);
+    img.onerror = () => {
+        console.error('Failed to preload:', prize.img);
+        // Замена на запасной URL, если ошибка
+        switch (prize.name) {
+            case '100 очков': prize.img = 'https://img.icons8.com/color/48/000000/coin.png'; break;
+            case 'Скин': prize.img = 'https://img.icons8.com/color/48/000000/knife.png'; break;
+            case 'Бонус': prize.img = 'https://img.icons8.com/color/48/000000/star.png'; break;
+            case '500 очков': prize.img = 'https://img.icons8.com/color/48/000000/money-bag.png'; break;
+            case 'Пусто': prize.img = 'https://img.icons8.com/color/48/000000/empty-box.png'; break;
+            case '200 очков': prize.img = 'https://img.icons8.com/color/48/000000/silver-coin.png'; break;
+        }
+    };
 });
 
 usernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
@@ -78,7 +91,7 @@ cases.forEach(caseEl => {
         openSound.play();
         modal.style.display = 'flex';
 
-        // Заполняем рулетку изображениями
+        // Предзагрузка и заполнение рулетки
         caseRoulette.innerHTML = '';
         const items = [...prizes, ...prizes, ...prizes, ...prizes, ...prizes];
         items.forEach(prize => {
@@ -87,7 +100,12 @@ cases.forEach(caseEl => {
             const img = document.createElement('img');
             img.src = prize.img;
             img.alt = prize.name;
-            img.onload = () => console.log('Preloaded:', prize.img); // Отладка
+            img.style.opacity = '0'; // Скрываем до загрузки
+            img.onload = () => {
+                img.style.opacity = '1'; // Показываем после загрузки
+                console.log('Item loaded in roulette:', prize.img);
+            };
+            img.onerror = () => console.error('Item failed to load in roulette:', prize.img);
             item.appendChild(img);
             caseRoulette.appendChild(item);
         });
@@ -108,9 +126,9 @@ cases.forEach(caseEl => {
             if (progress < 1500) {
                 speed += 0.5;
             } else if (progress < 3000) {
-                speed = Math.max(10, speed); // Максимальная скорость
+                speed = Math.max(10, speed);
             } else {
-                speed = Math.max(1, speed - 0.2); // Замедление
+                speed = Math.max(1, speed - 0.2);
             }
 
             caseRoulette.scrollLeft = scrollPos % totalWidth;
@@ -121,7 +139,7 @@ cases.forEach(caseEl => {
                 caseRoulette.scrollTo({ left: targetScroll, behavior: 'smooth' });
                 setTimeout(() => {
                     const prize = prizes[targetPrizeIndex];
-                    finalPrize.innerHTML = ''; // Очищаем
+                    finalPrize.innerHTML = '';
                     const imgElement = document.createElement('img');
                     imgElement.src = prize.img;
                     imgElement.alt = prize.name;
@@ -145,14 +163,15 @@ cases.forEach(caseEl => {
                         modalResult.textContent = `Ошибка: ${prize.name}`;
                     };
                     if (!imgElement.complete) {
-                        finalPrize.style.display = 'none'; // Скрываем до загрузки
+                        finalPrize.style.display = 'none';
                     }
                 }, 500);
             }
         }
 
         let start;
-        requestAnimationFrame(animateScroll);
+        // Задержка перед стартом для предзагрузки
+        setTimeout(() => requestAnimationFrame(animateScroll), 500);
     });
 });
 
