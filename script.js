@@ -9,6 +9,7 @@ const timerEl = document.getElementById('timer');
 const cases = document.querySelectorAll('.case');
 const modal = document.getElementById('modal');
 const caseRoulette = document.getElementById('case-roulette');
+const finalPrize = document.getElementById('final-prize');
 const modalResult = document.getElementById('modal-result');
 const closeModalBtn = document.getElementById('close-modal');
 const historyList = document.getElementById('history-list');
@@ -73,7 +74,7 @@ cases.forEach(caseEl => {
 
         // Заполняем рулетку изображениями
         caseRoulette.innerHTML = '';
-        const items = [...prizes, ...prizes, ...prizes, ...prizes]; // Больше повторов для эффекта
+        const items = [...prizes, ...prizes, ...prizes, ...prizes, ...prizes]; // Больше повторов
         items.forEach(prize => {
             const item = document.createElement('div');
             item.className = 'roulette-item';
@@ -85,32 +86,37 @@ cases.forEach(caseEl => {
         });
 
         // Анимация в стиле CS:GO
-        const totalHeight = items.length * 100; // Высота с учётом 100px
-        let speed = 10; // Начальная скорость
+        const totalHeight = items.length * 100;
+        let speed = 5; // Начальная скорость
         let scrollPos = 0;
         const targetPrizeIndex = Math.floor(Math.random() * prizes.length);
-        const targetScroll = targetPrizeIndex * 100 + (totalHeight / prizes.length) * 2; // Цель остановки
+        const targetScroll = targetPrizeIndex * 100 + (totalHeight / prizes.length) * 3; // Цель с запасом
 
-        function animateScroll() {
+        function animateScroll(timestamp) {
+            if (!start) start = timestamp;
+            const progress = timestamp - start;
             scrollPos += speed;
-            caseRoulette.scrollTop = scrollPos % totalHeight;
 
-            // Ускорение в начале, затем замедление
-            if (scrollPos < totalHeight / 2) {
+            // Ускорение в начале
+            if (progress < 1000) {
                 speed += 0.5;
-            } else if (scrollPos < targetScroll - 200) {
-                speed = Math.max(5, speed - 0.2); // Замедление
+            } else if (progress < 2500) {
+                speed = Math.max(10, speed); // Максимальная скорость
             } else {
-                speed = Math.max(1, speed - 0.1); // Финальное замедление
+                speed = Math.max(1, speed - 0.2); // Замедление
             }
 
-            if (scrollPos < targetScroll + 100) {
+            caseRoulette.scrollTop = scrollPos % totalHeight;
+
+            if (scrollPos < targetScroll) {
                 requestAnimationFrame(animateScroll);
             } else {
-                // Плавная остановка
+                // Плавная остановка и показ финального приза
                 caseRoulette.scrollTo({ top: targetScroll, behavior: 'smooth' });
                 setTimeout(() => {
                     const prize = prizes[targetPrizeIndex];
+                    finalPrize.innerHTML = `<img src="${prize.img}" alt="${prize.name}">`;
+                    finalPrize.style.display = 'flex';
                     modalResult.textContent = `Вы выиграл: ${prize.name}`;
                     if (prize.value > 0) {
                         balance += prize.value;
@@ -124,12 +130,14 @@ cases.forEach(caseEl => {
             }
         }
 
+        let start;
         requestAnimationFrame(animateScroll);
     });
 });
 
 closeModalBtn.addEventListener('click', () => {
     modal.style.display = 'none';
+    finalPrize.style.display = 'none';
 });
 
 const buySpinBtn = document.createElement('button');
