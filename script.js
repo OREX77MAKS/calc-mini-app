@@ -108,7 +108,7 @@ function spinCase(caseName) {
         openCase(caseName);
     }
     if (spins > 0) {
-        spinRoulette();
+        setTimeout(spinRoulette, 100); // Задержка для рендера
     }
 }
 
