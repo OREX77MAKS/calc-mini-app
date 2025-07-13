@@ -95,20 +95,20 @@ body {
 }
 
 .roulette-item img {
-    max-width: 90%; /* Уменьшим для адаптации */
-    max-height: 90%;
+    max-width: 10%; /* Уменьшим для адаптации */
+    max-height: 10%;
     object-fit: contain;
 }
 
 .final-prize {
-    height: 120px; /* Увеличим для лучшей видимости */
-    width: 120px;
-    margin: 10px auto;
+    height: 300px; /* Увеличим для лучшей видимости */
+    width: 300px;
+    margin: 120px auto;
     display: none;
     align-items: center;
     justify-content: center;
-    border: 2px solid #ffd700;
-    border-radius: 5px;
+    border: 1px solid #ffd700;
+    border-radius: 10px;
 }
 
 .final-prize img {
@@ -117,7 +117,7 @@ body {
 }
 
 .case-roulette.animate {
-    transition: transform 4s ease-out;
+    transition: transform 10s ease-out;
 }
 
 #close-modal {
@@ -154,7 +154,7 @@ body {
 }
 
 .history li {
-    margin: 5px 0;
-    font-size: 14px;
+    margin: 10px 0;
+    font-size: 20px;
     color: #ddd;
 }
