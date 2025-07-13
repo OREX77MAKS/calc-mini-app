@@ -62,8 +62,8 @@ body {
     max-width: 300px;
 }
 
-.slot-machine {
-    height: 240px; /* Для 6 изображений */
+.case-roulette {
+    height: 300px; /* Увеличим для анимации */
     background-color: #f0f0f0;
     margin: 10px 0;
     overflow: hidden;
@@ -73,28 +73,23 @@ body {
     align-items: center;
 }
 
-.slot-item {
-    height: 40px;
+.roulette-item {
+    height: 100px; /* Увеличим размер элемента */
     width: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 2px 0;
+    margin: 5px 0;
 }
 
-.slot-item img {
+.roulette-item img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
 }
 
-.slot-machine.animate {
-    animation: scrollAnimation 2s linear infinite;
-}
-
-@keyframes scrollAnimation {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-240px); } /* Высота для 6 элементов */
+.case-roulette.animate {
+    transition: transform 3s ease-out; /* Плавное замедление */
 }
 
 #close-modal {

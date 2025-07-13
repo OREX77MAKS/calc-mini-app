@@ -8,7 +8,7 @@ const spinsEl = document.getElementById('spins');
 const timerEl = document.getElementById('timer');
 const cases = document.querySelectorAll('.case');
 const modal = document.getElementById('modal');
-const slotMachine = document.getElementById('slot-machine');
+const caseRoulette = document.getElementById('case-roulette');
 const modalResult = document.getElementById('modal-result');
 const closeModalBtn = document.getElementById('close-modal');
 const historyList = document.getElementById('history-list');
@@ -20,12 +20,12 @@ let lastSpin = localStorage.getItem('lastSpin') ? new Date(localStorage.getItem(
 let history = localStorage.getItem('history') ? JSON.parse(localStorage.getItem('history')) : [];
 
 const prizes = [
-    { name: '100 очков', value: 100, chance: 30, img: 'https://imgur.com/8f5MtZ4.jpg' },
-    { name: 'Скин', value: 0, chance: 20, img: 'https://imgur.com/8f5MtZ4.jpg' },
-    { name: 'Бонус', value: 50, chance: 15, img: 'https://imgur.com/8f5MtZ4.jpg' },
-    { name: '500 очков', value: 500, chance: 10, img: 'https://imgur.com/8f5MtZ4.jpg' },
-    { name: 'Пусто', value: 0, chance: 15, img: 'https://imgur.com/8f5MtZ4.jpg' },
-    { name: '200 очков', value: 200, chance: 10, img: 'https://imgur.com/8f5MtZ4.jpg' }
+    { name: '100 очков', value: 100, chance: 30, img: 'https://img.icons8.com/color/48/000000/coin.png' },
+    { name: 'Скин', value: 0, chance: 20, img: 'https://img.icons8.com/color/48/000000/knife.png' },
+    { name: 'Бонус', value: 50, chance: 15, img: 'https://img.icons8.com/color/48/000000/star.png' },
+    { name: '500 очков', value: 500, chance: 10, img: 'https://img.icons8.com/color/48/000000/money-bag.png' },
+    { name: 'Пусто', value: 0, chance: 15, img: 'https://img.icons8.com/color/48/000000/empty-box.png' },
+    { name: '200 очков', value: 200, chance: 10, img: 'https://img.icons8.com/color/48/000000/silver-coin.png' }
 ];
 
 usernameEl.textContent = tg.initDataUnsafe.user ? `${tg.initDataUnsafe.user.first_name}'s` : 'Гостевой';
@@ -71,55 +71,60 @@ cases.forEach(caseEl => {
         openSound.play();
         modal.style.display = 'flex';
 
-        // Заполняем слот-машину изображениями
-        slotMachine.innerHTML = '';
-        const items = [...prizes, ...prizes, ...prizes]; // Повторяем для анимации
+        // Заполняем рулетку изображениями
+        caseRoulette.innerHTML = '';
+        const items = [...prizes, ...prizes, ...prizes, ...prizes]; // Больше повторов для эффекта
         items.forEach(prize => {
             const item = document.createElement('div');
-            item.className = 'slot-item';
+            item.className = 'roulette-item';
             const img = document.createElement('img');
-            img.src = prize.img; // Ссылка на изображение
+            img.src = prize.img;
             img.alt = prize.name;
             item.appendChild(img);
-            slotMachine.appendChild(item);
+            caseRoulette.appendChild(item);
         });
 
-        // Анимация прокрутки
-        slotMachine.classList.add('animate');
-        const slotHeight = 40; // Высота каждого элемента
-        const totalHeight = items.length * slotHeight;
+        // Анимация в стиле CS:GO
+        const totalHeight = items.length * 100; // Высота с учётом 100px
+        let speed = 10; // Начальная скорость
         let scrollPos = 0;
+        const targetPrizeIndex = Math.floor(Math.random() * prizes.length);
+        const targetScroll = targetPrizeIndex * 100 + (totalHeight / prizes.length) * 2; // Цель остановки
 
-        const animationDuration = 2000; // 2 секунды
-        const startTime = performance.now();
+        function animateScroll() {
+            scrollPos += speed;
+            caseRoulette.scrollTop = scrollPos % totalHeight;
 
-        function animate(time) {
-            const elapsed = time - startTime;
-            if (elapsed < animationDuration) {
-                scrollPos = (elapsed / animationDuration) * totalHeight;
-                slotMachine.scrollTop = scrollPos % totalHeight;
-                requestAnimationFrame(animate);
+            // Ускорение в начале, затем замедление
+            if (scrollPos < totalHeight / 2) {
+                speed += 0.5;
+            } else if (scrollPos < targetScroll - 200) {
+                speed = Math.max(5, speed - 0.2); // Замедление
             } else {
-                // Останавливаемся на случайном призе
-                const prizeIndex = Math.floor(Math.random() * prizes.length);
-                const targetScroll = prizeIndex * slotHeight + (totalHeight / prizes.length) * 2;
-                slotMachine.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                slotMachine.classList.remove('animate');
+                speed = Math.max(1, speed - 0.1); // Финальное замедление
+            }
 
-                const prize = prizes[prizeIndex];
-                modalResult.textContent = `Вы выиграл: ${prize.name}`;
-                if (prize.value > 0) {
-                    balance += prize.value;
-                    localStorage.setItem('balance', balance);
-                }
-                history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
-                localStorage.setItem('history', JSON.stringify(history));
-                localStorage.setItem('spins', spins);
-                updateUI();
+            if (scrollPos < targetScroll + 100) {
+                requestAnimationFrame(animateScroll);
+            } else {
+                // Плавная остановка
+                caseRoulette.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                setTimeout(() => {
+                    const prize = prizes[targetPrizeIndex];
+                    modalResult.textContent = `Вы выиграл: ${prize.name}`;
+                    if (prize.value > 0) {
+                        balance += prize.value;
+                        localStorage.setItem('balance', balance);
+                    }
+                    history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
+                    localStorage.setItem('history', JSON.stringify(history));
+                    localStorage.setItem('spins', spins);
+                    updateUI();
+                }, 500);
             }
         }
 
-        requestAnimationFrame(animate);
+        requestAnimationFrame(animateScroll);
     });
 });
 
