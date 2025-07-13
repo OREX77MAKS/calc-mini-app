@@ -85,12 +85,12 @@ cases.forEach(caseEl => {
             caseRoulette.appendChild(item);
         });
 
-        // Анимация в стиле CS:GO
-        const totalHeight = items.length * 100;
+        // Анимация в стиле CS:GO (горизонтальная)
+        const totalWidth = items.length * 100; // Ширина для горизонтали
         let speed = 5; // Начальная скорость
         let scrollPos = 0;
         const targetPrizeIndex = Math.floor(Math.random() * prizes.length);
-        const targetScroll = targetPrizeIndex * 100 + (totalHeight / prizes.length) * 3; // Цель с запасом
+        const targetScroll = targetPrizeIndex * 100 + (totalWidth / prizes.length) * 3; // Цель с запасом
 
         function animateScroll(timestamp) {
             if (!start) start = timestamp;
@@ -98,21 +98,21 @@ cases.forEach(caseEl => {
             scrollPos += speed;
 
             // Ускорение в начале
-            if (progress < 1000) {
+            if (progress < 1500) {
                 speed += 0.5;
-            } else if (progress < 2500) {
+            } else if (progress < 3000) {
                 speed = Math.max(10, speed); // Максимальная скорость
             } else {
                 speed = Math.max(1, speed - 0.2); // Замедление
             }
 
-            caseRoulette.scrollTop = scrollPos % totalHeight;
+            caseRoulette.scrollLeft = scrollPos % totalWidth; // Горизонтальная прокрутка
 
             if (scrollPos < targetScroll) {
                 requestAnimationFrame(animateScroll);
             } else {
                 // Плавная остановка и показ финального приза
-                caseRoulette.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                caseRoulette.scrollTo({ left: targetScroll, behavior: 'smooth' });
                 setTimeout(() => {
                     const prize = prizes[targetPrizeIndex];
                     finalPrize.innerHTML = `<img src="${prize.img}" alt="${prize.name}">`;
