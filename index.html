@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Рулетка Подарков</title>
+    <title>Кейсы</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Рулетка Подарков</h1>
+    <div class="container home">
         <div class="profile">
             <h2 id="username">Профиль</h2>
             <p>Баланс: <span id="balance">0</span> очков</p>
-            <p>Спины: <span id="spins">1</span> (бесплатный в день)</p>
         </div>
-        <div class="roulette">
-            <div class="wheel" id="wheel">
-                <div class="sector" style="--color: #ff0000;">100 очков</div>
-                <div class="sector" style="--color: #00ff00;">Скин</div>
-                <div class="sector" style="--color: #0000ff;">Бонус</div>
-                <div class="sector" style="--color: #ffff00;">500 очков</div>
-                <div class="sector" style="--color: #ff00ff;">Ничего</div>
-                <div class="sector" style="--color: #00ffff;">200 очков</div>
+        <h1>Выбери кейс</h1>
+        <div class="cases">
+            <div class="case" data-case="common">
+                <h3>Обычный кейс</h3>
+                <button onclick="openCase('common')">Открыть</button>
             </div>
-            <button id="spin-btn">Крутить рулетку</button>
-            <p id="result">Выиграй подарок!</p>
-        </div>
-        <div class="history">
-            <h3>История выигрышей</h3>
-            <ul id="history-list"></ul>
+            <div class="case" data-case="rare">
+                <h3>Редкий кейс</h3>
+                <button onclick="openCase('rare')">Открыть</button>
+            </div>
+            <div class="case" data-case="epic">
+                <h3>Эпический кейс</h3>
+                <button onclick="openCase('epic')">Открыть</button>
+            </div>
+            <div class="case" data-case="legendary">
+                <h3>Легендарный кейс</h3>
+                <button onclick="openCase('legendary')">Открыть</button>
+            </div>
         </div>
     </div>
 </body>
