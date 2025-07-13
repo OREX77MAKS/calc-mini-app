@@ -85,12 +85,12 @@ cases.forEach(caseEl => {
             caseRoulette.appendChild(item);
         });
 
-        // Анимация в стиле CS:GO (горизонтальная)
-        const totalWidth = items.length * 100; // Ширина для горизонтали
-        let speed = 5; // Начальная скорость
+        // Анимация слева направо
+        const totalWidth = items.length * 100;
+        let speed = 5;
         let scrollPos = 0;
         const targetPrizeIndex = Math.floor(Math.random() * prizes.length);
-        const targetScroll = targetPrizeIndex * 100 + (totalWidth / prizes.length) * 3; // Цель с запасом
+        const targetScroll = targetPrizeIndex * 100 + (totalWidth / prizes.length) * 3;
 
         function animateScroll(timestamp) {
             if (!start) start = timestamp;
@@ -111,7 +111,6 @@ cases.forEach(caseEl => {
             if (scrollPos < targetScroll) {
                 requestAnimationFrame(animateScroll);
             } else {
-                // Плавная остановка и показ финального приза
                 caseRoulette.scrollTo({ left: targetScroll, behavior: 'smooth' });
                 setTimeout(() => {
                     const prize = prizes[targetPrizeIndex];

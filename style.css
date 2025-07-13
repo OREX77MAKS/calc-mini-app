@@ -60,31 +60,33 @@ body {
     border-radius: 10px;
     text-align: center;
     width: 90%;
-    max-width: 500px; /* Прямоугольник шире */
+    max-width: 500px;
     color: #fff;
 }
 
 .case-roulette-container {
     position: relative;
-    height: 150px; /* Высота фиксированная */
+    height: 150px;
     margin: 10px 0;
+    overflow: hidden; /* Скрываем лишнее */
 }
 
 .case-roulette {
-    height: 100px; /* Меньше для прямоугольника */
-    width: 400px; /* Шире для горизонтали */
+    height: 100px;
+    width: 500px; /* Увеличим ширину для горизонтали */
     background-color: #3a3a50;
-    overflow: hidden;
+    overflow-x: hidden; /* Только горизонтальная прокрутка */
     position: relative;
     display: flex;
-    flex-direction: row; /* Горизонтальная прокрутка */
+    flex-direction: row; /* Горизонтальная ориентация */
     align-items: center;
+    white-space: nowrap; /* Предотвращаем перенос строк */
 }
 
 .roulette-item {
     height: 100px;
     width: 100px;
-    display: flex;
+    display: inline-flex; /* Горизонтальный ряд */
     align-items: center;
     justify-content: center;
     margin: 0 5px;
@@ -113,7 +115,7 @@ body {
 }
 
 .case-roulette.animate {
-    transition: transform 4s ease-out; /* Увеличим до 4 секунд */
+    transition: transform 4s ease-out; /* 4 секунды анимации */
 }
 
 #close-modal {
