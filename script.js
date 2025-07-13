@@ -96,9 +96,11 @@ function updateUI() {
             sector.className = 'sector';
             sector.style.setProperty('--i', i);
             sector.style.setProperty('--color', ['#ff4500', '#32cd32', '#1e90ff', '#ffd700', '#da70d6', '#20b2aa'][i % 6]);
-            sector.textContent = prize.name.split(' ')[0]; // Только число или слово
+            sector.textContent = prize.name.split(' ')[0];
             wheel.appendChild(sector);
         });
+    } else {
+        console.log("Case container is not active");
     }
 }
 
@@ -107,9 +109,14 @@ function spinCase(caseName) {
     if (caseContainer.style.display === 'none') {
         openCase(caseName);
     }
-    if (spins > 0) {
-        setTimeout(spinRoulette, 100); // Задержка для рендера
-    }
+    // Проверяем состояние после рендера
+    setTimeout(() => {
+        if (spins > 0) {
+            spinRoulette();
+        } else {
+            alert("Нет спинов! Купите спин за 50 очков.");
+        }
+    }, 200); // Увеличенная задержка для рендера
 }
 
 function openCase(caseName) {
@@ -118,6 +125,7 @@ function openCase(caseName) {
     homeContainer.style.display = 'none';
     caseContainer.style.display = 'block';
     updateUI();
+    console.log(`Opened ${caseName} case, spins: ${spins}`); // Отладка
 }
 
 function goBack() {
@@ -135,7 +143,10 @@ function closePopup() {
 }
 
 function spinRoulette() {
-    if (spins <= 0) return;
+    if (spins <= 0) {
+        alert("Нет спинов! Купите спин за 50 очков.");
+        return;
+    }
     spins--;
     spinSound.play();
     const randomRotation = Math.floor(Math.random() * 360) + 360 * 6;
