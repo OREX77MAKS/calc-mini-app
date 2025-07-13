@@ -68,6 +68,28 @@ body {
     margin: 10px 0;
     overflow: hidden;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.slot-item {
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    background-color: #ddd;
+    margin: 2px 0;
+}
+
+.slot-machine.animate {
+    animation: scrollAnimation 2s linear infinite;
+}
+
+@keyframes scrollAnimation {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-200px); } /* Высота контейнера */
 }
 
 #close-modal {
@@ -80,26 +102,18 @@ body {
     cursor: pointer;
 }
 
-#spin-btn, #buy-spin-btn {
+#buy-spin-btn {
     padding: 12px 25px;
     font-size: 18px;
+    background-color: #32cd32;
+    color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     margin: 5px;
 }
 
-#spin-btn {
-    background-color: #ff4500;
-    color: white;
-}
-
-#buy-spin-btn {
-    background-color: #32cd32;
-    color: white;
-}
-
-#spin-btn:disabled, #buy-spin-btn:disabled {
+#buy-spin-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }

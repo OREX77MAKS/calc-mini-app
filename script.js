@@ -71,30 +71,52 @@ cases.forEach(caseEl => {
         openSound.play();
         modal.style.display = 'flex';
 
-        const slotItems = prizes.map(p => `<div class="slot-item">${p.name}</div>`).join('');
-        slotMachine.innerHTML = slotItems;
-        const slotHeight = slotMachine.scrollHeight / prizes.length;
+        // Создаём элементы для анимации
+        slotMachine.innerHTML = '';
+        const items = [...prizes, ...prizes, ...prizes]; // Повторяем для эффекта
+        items.forEach(prize => {
+            const item = document.createElement('div');
+            item.className = 'slot-item';
+            item.textContent = prize.name;
+            slotMachine.appendChild(item);
+        });
+
+        // Запускаем анимацию
+        slotMachine.classList.add('animate');
+        const slotHeight = 40; // Высота каждого элемента
+        const totalHeight = items.length * slotHeight;
         let scrollPos = 0;
 
-        const interval = setInterval(() => {
-            scrollPos += 10;
-            slotMachine.scrollTop = scrollPos;
-            if (scrollPos >= slotMachine.scrollHeight) scrollPos = 0;
-        }, 50);
+        const animationDuration = 2000; // 2 секунды анимации
+        const startTime = performance.now();
 
-        setTimeout(() => {
-            clearInterval(interval);
-            const prize = getRandomPrize();
-            modalResult.textContent = `Вы выиграл: ${prize.name}`;
-            if (prize.value > 0) {
-                balance += prize.value;
-                localStorage.setItem('balance', balance);
+        function animate(time) {
+            const elapsed = time - startTime;
+            if (elapsed < animationDuration) {
+                scrollPos = (elapsed / animationDuration) * totalHeight;
+                slotMachine.scrollTop = scrollPos % totalHeight;
+                requestAnimationFrame(animate);
+            } else {
+                // Останавливаем на случайном призе
+                const prizeIndex = Math.floor(Math.random() * prizes.length);
+                const targetScroll = prizeIndex * slotHeight;
+                slotMachine.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                slotMachine.classList.remove('animate');
+
+                const prize = prizes[prizeIndex];
+                modalResult.textContent = `Вы выиграл: ${prize.name}`;
+                if (prize.value > 0) {
+                    balance += prize.value;
+                    localStorage.setItem('balance', balance);
+                }
+                history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
+                localStorage.setItem('history', JSON.stringify(history));
+                localStorage.setItem('spins', spins);
+                updateUI();
             }
-            history.push(`${new Date().toLocaleTimeString()} - ${prize.name}`);
-            localStorage.setItem('history', JSON.stringify(history));
-            localStorage.setItem('spins', spins);
-            updateUI();
-        }, 2000);
+        }
+
+        requestAnimationFrame(animate);
     });
 });
 
@@ -102,7 +124,10 @@ closeModalBtn.addEventListener('click', () => {
     modal.style.display = 'none';
 });
 
-function buySpin() {
+const buySpinBtn = document.createElement('button');
+buySpinBtn.textContent = 'Купить спин (50 очков)';
+buySpinBtn.id = 'buy-spin-btn';
+buySpinBtn.addEventListener('click', () => {
     if (balance >= 50) {
         balance -= 50;
         spins++;
@@ -110,13 +135,7 @@ function buySpin() {
         localStorage.setItem('spins', spins);
         updateUI();
     }
-}
-
-// Добавим кнопку покупки спина
-const buySpinBtn = document.createElement('button');
-buySpinBtn.textContent = 'Купить спин (50 очков)';
-buySpinBtn.id = 'buy-spin-btn';
-buySpinBtn.addEventListener('click', buySpin);
+});
 document.querySelector('.profile').appendChild(buySpinBtn);
 
 setInterval(updateUI, 1000);
